@@ -28,7 +28,7 @@
 #'\item{ \code{I0}, a vector. Selected reference set.}
 #'\item{ \code{pi0}, a number. The estimated proportion of reference set.}
 #'}
-cn = function(physeq = NULL, count_table = NULL, eta=0.01, lib_cut = 0, bootstrap_num = 3){
+RSimNorm = function(physeq = NULL, count_table = NULL, eta=0.01, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing
     if(is.null(count_table)){
         if(!is.null(physeq)){

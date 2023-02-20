@@ -1,6 +1,6 @@
-#' @title wilcoxon-test with data normalized by CN.
+#' @title wilcoxon-test with data normalized by RSimNorm.
 #'
-#' @description This function conduct differential abundant test by wilcoxon-test with data normalized by CN.
+#' @description This function conduct differential abundant test by wilcoxon-test with data normalized by RSimNorm.
 #'
 #' @importFrom phyloseq tax_table otu_table sample_data phyloseq
 #' @importFrom microbiome abundances aggregate_taxa
@@ -44,7 +44,7 @@ wilcox.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL
     if(any(is.na(X))) {
         stop('The OTU/ASV table contains NAs! Please remove!\n')
       }
-    X.cn = cn(count_table = X, eta, lib_cut, bootstrap_num)$P
+    X.cn = RSimNorm(count_table = X, eta, lib_cut, bootstrap_num)$P
     if(!is.null(tax_level)){
         TAX = phyloseq::tax_table(physeq)
         META = phyloseq::sample_data(physeq)
