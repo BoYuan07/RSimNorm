@@ -28,17 +28,17 @@
 #'\item{ \code{I0}, a vector. Selected reference set.}
 #'\item{ \code{pi0}, a number. The estimated proportion of reference set.}
 #'}
-cn = function(physeq = NULL, count_table = NULL, eta=0.01, lib_cut = 0, bootstap_num = 3){
+cn = function(physeq = NULL, count_table = NULL, eta=0.01, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing
     if(is.null(count_table)){
         if(!is.null(physeq)){
-            feature_table = microbiome::abundances(physeq)
-            X = data_preprocess(feature_table, lib_cut)
+            count_table = microbiome::abundances(physeq)
+            X = data_preprocess(count_table, lib_cut)
         }else{
             stop('Must have count data.')
         }
     }else{
-      X = data_preprocess(feature_table, lib_cut)
+      X = data_preprocess(count_table, lib_cut)
     }
     if(any(is.na(X))) {
         stop('The OTU/ASV table contains NAs! Please remove!\n')

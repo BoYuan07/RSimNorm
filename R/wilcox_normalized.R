@@ -27,33 +27,34 @@
 #'\item{ \code{is.DA}, a vector. T is differential abundant, F is not differential abundant.}
 #'}
 wilcox.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, meta = NULL, main_var, method = "BH",
-                            alpha = 0.05, eta = 0, lib_cut = 0, bootstap_num = 3){
+                            alpha = 0.05, eta = 0, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing
     if(is.null(count_table)){
         if(!is.null(physeq)){
-            feature_table = abundances(physeq)
+            count_table = abundances(physeq)
             meta = phyloseq::sample_data(physeq)
-            X = data_preprocess(feature_table, lib_cut)
-            if(!is.null(tax_level)){
-                TAX = phyloseq::tax_table(physeq)
-                META = phyloseq::sample_data(physeq)
-                OTU = phyloseq::otu_table(X,taxa_are_rows = T)
-                physeq1 = phyloseq::phyloseq(OTU,TAXA,META)
-                physeq.agg = microbiome::aggregate_taxa(physeq,tax_level)
-                X = microbiome::abundances(physeq.agg)
-            }
+            X = data_preprocess(count_table, lib_cut)
         }else{
             stop('Must have count data.')
         }
     }else{
-      X = data_preprocess(feature_table, lib_cut)
+      X = data_preprocess(count_table, lib_cut)
       meta = meta
     }
     if(any(is.na(X))) {
         stop('The OTU/ASV table contains NAs! Please remove!\n')
       }
-    X.cn = cn(count_table = X, eta, lib_cut, bootstap_num)
-    d = nrow(X.cn)
+    X.cn = cn(count_table = X, eta, lib_cut, bootstrap_num)$P
+    if(!is.null(tax_level)){
+        TAX = phyloseq::tax_table(physeq)
+        META = phyloseq::sample_data(physeq)
+        OTU = phyloseq::otu_table(X.cn,taxa_are_rows = T)
+        physeq1 = phyloseq::phyloseq(OTU,TAXA,META)
+        physeq.agg = microbiome::aggregate_taxa(physeq1,tax_level)
+        X = microbiome::abundances(physeq.agg)
+    }else{
+        X = X.cn
+    }
     Y = meta[,main_var]
     if(length(unique(Y)) >= 2) {
         stop('Main varaible contains too many categories. Only two are allowed for t-test.')
@@ -61,10 +62,11 @@ wilcox.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL
     if(any(is.na(Y))){
         stop('Main varaible contains NAs! Please remove!\n')
     }
-    if(ncol(X)!=length(Y)){
+    if(ncol(X)!=nrow(Y)){
         stop('Main varaible has different size with samples.')
     }
-    d = ncol(X)
+    d = nrow(X)
+    colnames(Y) = 'Y'
     data = cbind(t(X),Y)
     w_p <- sapply(1:d, function(i)wilcox.test(as.numeric(data[, i]) ~ Y, data = data)$p.value)
     p <- p.adjust(t_p, method=method)
