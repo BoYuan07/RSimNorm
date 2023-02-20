@@ -11,7 +11,7 @@
 #' @examples
 #'
 #'  data(gut_cn)
-#'      Datanorm <- cn(count_table = A)$P
+#'      Datanorm <- RSimNorm(count_table = A)$P
 #'
 #' @param physeq A \code{phyloseq} object which consists of a count table, a sample metadata. The row
 #' names of the meta data must match the sample names of the count table.
