@@ -56,9 +56,6 @@ corr.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, 
         X = X.cn
     }
     Y = meta[,main_var]
-    if(length(unique(Y)) >= 2) {
-        stop('Main varaible contains too many categories. Only two are allowed for t-test.')
-    }
     if(any(is.na(Y))){
         stop('Main varaible contains NAs! Please remove!\n')
     }
