@@ -1,7 +1,7 @@
 Package: RSimNorm
 Title: Normalization for microbiome data
 Version: 0.0.0.9000
-Authors@R: Bo Yuan
+Authors@R: person("Bo", "Yuan", , "boyuan5@illinois.edu", role = c("aut", "cre"))
 Description: This package implements RSimNorm - a method to normalize microbiome data.
 License: MIT+file LICENSE
 Encoding: UTF-8
@@ -9,4 +9,11 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
     R (>= 2.10)
+Imports: microbiome, matrixStats, phyloseq
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
 LazyData: true
+Config/testthat/edition: 3
+VignetteBuilder: knitr

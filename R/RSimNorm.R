@@ -22,12 +22,12 @@
 #' discard any sample.
 #' @param bootstrap_num Bootstrap times. Default setting is 3 if the number of taxa is large.
 #'
-#' return a \code{list} with components:
-#'\itemize{
-#'\item{ \code{P}, a matrix. Normalized data. Row represents taxa. Column represents samples.}
-#'\item{ \code{I0}, a vector. Selected reference set.}
-#'\item{ \code{pi0}, a number. The estimated proportion of reference set.}
-#'}
+#' @returns a \code{list} with components:
+#' \itemize{
+#' \item{ \code{P}, a matrix. Normalized data. Row represents taxa. Column represents samples.}
+#' \item{ \code{I0}, a vector. Selected reference set.}
+#' \item{ \code{pi0}, a number. The estimated proportion of reference set.}
+#' }
 RSimNorm = function(physeq = NULL, count_table = NULL, eta=0.01, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing
     if(is.null(count_table)){

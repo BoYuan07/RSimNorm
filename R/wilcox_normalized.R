@@ -19,19 +19,19 @@
 #' discard any sample.
 #' @param bootstrap_num Bootstrap times. Default setting is 3 if the number of taxa is large.
 #'
-#' return a \code{dataframe} with columns:
-#'\itemize{
-#'\item{ \code{taxa}, a vector. Names of taxa.}
-#'\item{ \code{p-value}, a vector. p-value.}
-#'\item{ \code{adjusted p-value}, a vector. adjusted p-value.}
-#'\item{ \code{is.DA}, a vector. T is differential abundant, F is not differential abundant.}
-#'}
+#' @returns a \code{dataframe} with columns:
+#' \itemize{
+#' \item{ \code{taxa}, a vector. Names of taxa.}
+#' \item{ \code{p-value}, a vector. p-value.}
+#' \item{ \code{adjusted p-value}, a vector. adjusted p-value.}
+#' \item{ \code{is.DA}, a vector. T is differential abundant, F is not differential abundant.}
+#' }
 wilcox.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, meta = NULL, main_var, method = "BH",
                             alpha = 0.05, eta = 0, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing
     if(is.null(count_table)){
         if(!is.null(physeq)){
-            count_table = abundances(physeq)
+            count_table = microbiome::abundances(physeq)
             meta = phyloseq::sample_data(physeq)
             X = data_preprocess(count_table, lib_cut)
         }else{
@@ -41,12 +41,13 @@ wilcox.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL
       X = data_preprocess(count_table, lib_cut)
       meta = meta
     }
+    meta = data.frame(meta)
     if(any(is.na(X))) {
         stop('The OTU/ASV table contains NAs! Please remove!\n')
       }
     X.cn = RSimNorm(count_table = X, eta, lib_cut, bootstrap_num)$P
     if(!is.null(tax_level)){
-        TAX = phyloseq::tax_table(physeq)
+        TAXA = phyloseq::tax_table(physeq)
         META = phyloseq::sample_data(physeq)
         OTU = phyloseq::otu_table(X.cn,taxa_are_rows = T)
         physeq1 = phyloseq::phyloseq(OTU,TAXA,META)
@@ -56,20 +57,20 @@ wilcox.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL
         X = X.cn
     }
     Y = meta[,main_var]
-    if(length(unique(Y)) >= 2) {
+    if(length(unique(Y)) > 2) {
         stop('Main varaible contains too many categories. Only two are allowed for t-test.')
     }
     if(any(is.na(Y))){
         stop('Main varaible contains NAs! Please remove!\n')
     }
-    if(ncol(X)!=nrow(Y)){
+    if(ncol(X)!=length(Y)){
         stop('Main varaible has different size with samples.')
     }
     d = nrow(X)
-    colnames(Y) = 'Y'
-    data = cbind(t(X),Y)
+    data = data.frame(cbind(t(X),Y))
+    colnames(data)[ncol(data)] = 'Y'
     w_p <- sapply(1:d, function(i)wilcox.test(as.numeric(data[, i]) ~ Y, data = data)$p.value)
-    p <- p.adjust(t_p, method=method)
+    p <- p.adjust(w_p, method=method)
     res = data.frame('taxa' = rownames(X), 'p-value' = w_p, 'adjusted p-value' = p, 'is.DA' = (p<alpha))
     return(res)
 }

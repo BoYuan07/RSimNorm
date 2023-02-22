@@ -1,0 +1,145 @@
+---
+title: "RSimNorm"
+author: 
+  - Bo Yuan
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+bibliography: bibliography.bib
+vignette: >
+  %\VignetteIndexEntry{RSimNorm}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, message = FALSE, warning = FALSE, comment = NA}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA, 
+                      fig.width = 6.25, fig.height = 5)
+
+library(RSimNorm)
+library(DT)
+```
+
+# 1. Introduction
+
+RSimNorm is a normalization method designed for low resolution level(ATUs/OTUs) of microbiome data. Our method estimates the reference set by measuring the classification error using Empirical Bayes, and use the total counts of reference set to normalize the raw data. For more details, please refer to the paper.
+
+# 2. Installation
+
+The package can be downloaded from github:
+
+```{r}
+devtools::install_github("BoYuan07/RSimNorm")
+```
+
+Load the package
+
+```{r}
+library(RSimNorm)
+```
+
+# 3. Example data introduction
+
+We use the gut microbiome data collected by Vangay et.al[@VANGAY2018962]. The 
+16S rRNA human gut data is collected from healthy female individuals who were 
+living in Thailand(HmongThai, KarenThai), who were the 1st immigration to the 
+US(Hmong1st, Karen1st), and who were 2nd immigration to the US (Hmong2nd). 
+Samples with the same region and ethnicity should have 
+no obvious difference. We divide KarenThai into two groups based on the 
+sequencing depth(>10000 for the first group and <5000 for the second group). 
+We only consider samples from Karen in this example.
+
+```{r}
+data("Karen")
+
+# Phyloseq 
+pseq = Karen
+
+# Count and meta matrix
+count = microbiome::abundances(pseq)
+meta = data.frame(phyloseq::sample_data(pseq))
+```
+
+# 4. Implementation of RSimNorm package
+
+## 4.1 Normalization
+
+We can normalize the ASVs in both *phyloseq* data type and count matrix.
+
+```{r}
+out1 = RSimNorm(pseq)
+out2 = RSimNorm(count_table = count)
+```
+
+The results from RSimNorm includes: 1) a normalized count matrix; 
+2) the estimated referece set index; 3) the estimated proportion of reference 
+set.
+
+## 4.2 Conduct t-test/wilcoxon.test on normalized data.
+
+When the interested variable is two-level factor, we could use t-test or wilcoxon 
+test to conduct differential abundant test. Next we using t-test to investigate 
+the relationship between gut microbiome and sample group(KarenThai, Karen1st). 
+
+We can conduct the differential abundant test on a ASV level using *phyloseq* 
+data:
+
+```{r}
+t.out1 = t.normalized(pseq, main_var = "sample_group", tax_level = NULL, 
+                      meta = NULL, method = "BH", alpha = 0.05, 
+                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+datatable(t.out2)
+```
+
+Or we can use the count data and meta:
+
+```{r}
+t.out2 = t.normalized(count_table = count, meta = meta,
+                      main_var = "sample_group", tax_level = NULL, 
+                       method = "BH", alpha = 0.05, eta = 0, lib_cut = 0, 
+                      bootstrap_num = 3)
+datatable(t.out2)
+```
+
+We can also conduct the differential abundance test on the Genus level:
+
+```{r}
+t.out3 = t.normalized(pseq, main_var = "sample_group", tax_level = "Genus", 
+                      meta = NULL, method = "BH", alpha = 0.05, 
+                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+datatable(t.out3)
+```
+
+The usage of wilcoxon.normalized function is exactly the same with t.test, 
+except it uses wilcoxon test instead of t-test. 
+
+## 4.3 Conduct correlation test on normalized data
+
+When the interested variable is continuous, such as age, we can conduct 
+differential abundant test by correlation test. We investigate the relationship 
+between gut microbiome and age.
+
+```{r}
+corr.out1 = corr.normalized(pseq, main_var = "age", tax_level = NULL, 
+                      meta = NULL, type = "pearson", method = "BH", alpha = 0.05, 
+                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+datatable(corr.out1)
+```
+
+Or we can use the count data and meta:
+
+```{r}
+corr.out2 = corr.normalized(count_table = count, main_var = "age", tax_level = NULL, 
+                      meta = meta, type = "pearson", method = "BH", alpha = 0.05, 
+                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+datatable(corr.out2)
+```
+
+We can also conduct the differential abundance test on the Genus level:
+
+```{r}
+corr.out3 = corr.normalized(pseq, main_var = "age", tax_level = "Genus", 
+                      meta = NULL, type = "pearson", method = "BH", alpha = 0.05, 
+                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+datatable(corr.out3)
+```
+
