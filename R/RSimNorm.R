@@ -28,7 +28,7 @@
 #' \item{ \code{I0}, a vector. Selected reference set.}
 #' \item{ \code{pi0}, a number. The estimated proportion of reference set.}
 #' }
-RSimNorm = function(physeq = NULL, count_table = NULL, eta=0.01, lib_cut = 0, bootstrap_num = 3){
+RSimNorm = function(physeq = NULL, count_table = NULL, eta=0.01, gamma = 0.8, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing
     if(is.null(count_table)){
         if(!is.null(physeq)){
@@ -51,7 +51,7 @@ RSimNorm = function(physeq = NULL, count_table = NULL, eta=0.01, lib_cut = 0, bo
     
     # 2. Calculate M statistic
     v = CStat(X)
-    I0.1 = which(v>0.8)
+    I0.1 = which(v>gamma)
     X0 = X[I0.1,]
     if(bootstrap_num*0.5*nrow(X0)<100){
         bootstrap_num = ceiling(100/(0.5*nrow(X0)))
