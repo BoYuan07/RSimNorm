@@ -17,6 +17,7 @@
 #' names of the meta data must match the sample names of the count table.
 #' @param count_table A numeric matrix or data frame. Row represents taxa. Column represents samples.
 #' @param eta The classification error control level. We recommend to choose it between 0 and 0.07.
+#' @param gamma The correlation threshold. Recommended value for OTU/ASV level analysis is 0.8.
 #' @param lib_cut A numerical threshold for filtering samples based on library sizes. Samples with
 #' library sizes less than \code{lib_cut} will be excluded in the analysis. Default is 0, i.e. do not
 #' discard any sample.
@@ -57,7 +58,7 @@ RSimNorm = function(physeq = NULL, count_table = NULL, eta=0.01, gamma = 0.8, li
         bootstrap_num = ceiling(100/(0.5*nrow(X0)))
     }
     v0 = replicate(bootstrap_num,CStat(X0[sample(1:nrow(X0),0.5*nrow(X0)),]))
-    w = v[v>0.8]
+    w = v[v>gamma]
     if(is.null(w)){
         stop('Please conduct the normalization on a OTUs/ASVs level without prevalence filtering.')
     }
