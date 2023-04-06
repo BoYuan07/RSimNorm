@@ -28,7 +28,7 @@ RSimNorm is a normalization method designed for low resolution level(ATUs/OTUs) 
 The package can be downloaded from github:
 
 ```{r}
-devtools::install_github("BoYuan07/RSimNorm")
+# devtools::install_github("BoYuan07/RSimNorm")
 ```
 
 Load the package
@@ -84,16 +84,16 @@ We can conduct the differential abundant test on a ASV level using *phyloseq*
 data:
 
 ```{r}
-t.out1 = t.normalized(pseq, main_var = "sample_group", tax_level = NULL, 
+t.out1 = t_normalized(pseq, main_var = "sample_group", tax_level = NULL, 
                       meta = NULL, method = "BH", alpha = 0.05, 
                       eta = 0, lib_cut = 0, bootstrap_num = 3)
-datatable(t.out2)
+datatable(t.out1)
 ```
 
 Or we can use the count data and meta:
 
 ```{r}
-t.out2 = t.normalized(count_table = count, meta = meta,
+t.out2 = t_normalized(count_table = count, meta = meta,
                       main_var = "sample_group", tax_level = NULL, 
                        method = "BH", alpha = 0.05, eta = 0, lib_cut = 0, 
                       bootstrap_num = 3)
@@ -103,7 +103,7 @@ datatable(t.out2)
 We can also conduct the differential abundance test on the Genus level:
 
 ```{r}
-t.out3 = t.normalized(pseq, main_var = "sample_group", tax_level = "Genus", 
+t.out3 = t_normalized(pseq, main_var = "sample_group", tax_level = "Genus", 
                       meta = NULL, method = "BH", alpha = 0.05, 
                       eta = 0, lib_cut = 0, bootstrap_num = 3)
 datatable(t.out3)

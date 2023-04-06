@@ -28,8 +28,7 @@
 #' }
 #'
 #' @export
-
-t.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, meta = NULL, main_var,
+t_normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, meta = NULL, main_var,
                         method = "BH", alpha = 0.05, eta = 0, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing
     if(is.null(count_table)){
