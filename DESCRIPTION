@@ -2,7 +2,7 @@ Package: RSimNorm
 Title: Normalization for microbiome data
 Version: 0.0.0.9000
 Authors@R: person("Bo", "Yuan", , "boyuan5@illinois.edu", role = c("aut", "cre"))
-Description: This package implements RSimNorm - a method to normalize microbiome data.
+Description: This package implements RSim: A Reference-Based Normalization Method via Rank Similarity (https://www.biorxiv.org/content/10.1101/2023.04.04.535620v1).
 License: MIT+file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
