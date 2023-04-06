@@ -2,7 +2,7 @@
 % Please edit documentation in R/corr_normalized.R
 \name{corr.normalized}
 \alias{corr.normalized}
-\title{correlation-test with data normalized by RSimNorm.}
+\title{Correlation-test with data normalized by RSimNorm.}
 \usage{
 corr.normalized(
   physeq = NULL,

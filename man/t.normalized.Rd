@@ -2,7 +2,7 @@
 % Please edit documentation in R/t_normalized.R
 \name{t.normalized}
 \alias{t.normalized}
-\title{t-test with data normalized by RSimNorm.}
+\title{Two sample t-test with data normalized by RSimNorm.}
 \usage{
 \method{t}{normalized}(
   physeq = NULL,

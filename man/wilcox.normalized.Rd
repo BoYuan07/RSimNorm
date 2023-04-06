@@ -2,7 +2,7 @@
 % Please edit documentation in R/wilcox_normalized.R
 \name{wilcox.normalized}
 \alias{wilcox.normalized}
-\title{wilcoxon-test with data normalized by RSimNorm.}
+\title{Wilcoxon-test with data normalized by RSimNorm.}
 \usage{
 wilcox.normalized(
   physeq = NULL,
