@@ -28,7 +28,7 @@ RSimNorm is a normalization method designed for low resolution level(ATUs/OTUs) 
 The package can be downloaded from github:
 
 ```{r}
-# devtools::install_github("BoYuan07/RSimNorm")
+devtools::install_github("BoYuan07/RSimNorm")
 ```
 
 Load the package
@@ -66,7 +66,7 @@ meta = data.frame(phyloseq::sample_data(pseq))
 We can normalize the ASVs in both *phyloseq* data type and count matrix.
 
 ```{r}
-out1 = RSimNorm(pseq)
+out1 = RSimNorm(pseq, eta = 0)
 out2 = RSimNorm(count_table = count)
 ```
 
@@ -86,7 +86,7 @@ data:
 ```{r}
 t.out1 = t_normalized(pseq, main_var = "sample_group", tax_level = NULL, 
                       meta = NULL, method = "BH", alpha = 0.05, 
-                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+                      eta = 0, gamma = 0.8, lib_cut = 0, bootstrap_num = 3)
 datatable(t.out1)
 ```
 
@@ -95,8 +95,8 @@ Or we can use the count data and meta:
 ```{r}
 t.out2 = t_normalized(count_table = count, meta = meta,
                       main_var = "sample_group", tax_level = NULL, 
-                       method = "BH", alpha = 0.05, eta = 0, lib_cut = 0, 
-                      bootstrap_num = 3)
+                       method = "BH", alpha = 0.05, eta = 0, gamma = 0.8, 
+                      lib_cut = 0, bootstrap_num = 3)
 datatable(t.out2)
 ```
 
@@ -105,7 +105,7 @@ We can also conduct the differential abundance test on the Genus level:
 ```{r}
 t.out3 = t_normalized(pseq, main_var = "sample_group", tax_level = "Genus", 
                       meta = NULL, method = "BH", alpha = 0.05, 
-                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+                      eta = 0, gamma = 0.8, lib_cut = 0, bootstrap_num = 3)
 datatable(t.out3)
 ```
 
@@ -121,7 +121,7 @@ between gut microbiome and age.
 ```{r}
 corr.out1 = corr.normalized(pseq, main_var = "age", tax_level = NULL, 
                       meta = NULL, type = "pearson", method = "BH", alpha = 0.05, 
-                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+                      eta = 0, gamma = 0.8, lib_cut = 0, bootstrap_num = 3)
 datatable(corr.out1)
 ```
 
@@ -130,7 +130,7 @@ Or we can use the count data and meta:
 ```{r}
 corr.out2 = corr.normalized(count_table = count, main_var = "age", tax_level = NULL, 
                       meta = meta, type = "pearson", method = "BH", alpha = 0.05, 
-                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+                      eta = 0, gamma = 0.8, lib_cut = 0, bootstrap_num = 3)
 datatable(corr.out2)
 ```
 
@@ -139,7 +139,7 @@ We can also conduct the differential abundance test on the Genus level:
 ```{r}
 corr.out3 = corr.normalized(pseq, main_var = "age", tax_level = "Genus", 
                       meta = NULL, type = "pearson", method = "BH", alpha = 0.05, 
-                      eta = 0, lib_cut = 0, bootstrap_num = 3)
+                      eta = 0, gamma = 0.8, lib_cut = 0, bootstrap_num = 3)
 datatable(corr.out3)
 ```
 

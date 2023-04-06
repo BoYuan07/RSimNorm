@@ -14,6 +14,7 @@
 #' @param method Correction method for multiple testing effect.
 #' @param alpha Significance level.
 #' @param eta The classification error control level. We recommend to choose it between 0 and 0.07.
+#' @param gamma The correlation threshold. Recommended value for OTU/ASV level analysis is 0.8.
 #' @param lib_cut A numerical threshold for filtering samples based on library sizes. Samples with
 #' library sizes less than \code{lib_cut} will be excluded in the analysis. Default is 0, i.e. do not
 #' discard any sample.
@@ -29,7 +30,7 @@
 #'
 #' @export
 t_normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, meta = NULL, main_var,
-                        method = "BH", alpha = 0.05, eta = 0, lib_cut = 0, bootstrap_num = 3){
+                        method = "BH", alpha = 0.05, eta = 0, gamma = 0.8, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing
     if(is.null(count_table)){
         if(!is.null(physeq)){
@@ -47,7 +48,7 @@ t_normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, met
     if(any(is.na(X))) {
         stop('The OTU/ASV table contains NAs! Please remove!\n')
       }
-    X.cn = RSimNorm(count_table = X, eta, lib_cut, bootstrap_num)$P
+    X.cn = RSimNorm(count_table = X, eta, gamma, lib_cut, bootstrap_num)$P
     if(!is.null(tax_level)){
         TAXA = phyloseq::tax_table(physeq)
         META = phyloseq::sample_data(physeq)

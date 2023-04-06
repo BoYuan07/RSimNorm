@@ -13,6 +13,7 @@ wilcox.normalized(
   method = "BH",
   alpha = 0.05,
   eta = 0,
+  gamma = 0.8,
   lib_cut = 0,
   bootstrap_num = 3
 )
@@ -32,6 +33,8 @@ The row names of the meta data must match the sample names of the count table.}
 \item{alpha}{Significance level.}
 
 \item{eta}{The classification error control level. We recommend to choose it between 0 and 0.07.}
+
+\item{gamma}{The correlation threshold. Recommended value for OTU/ASV level analysis is 0.8.}
 
 \item{lib_cut}{A numerical threshold for filtering samples based on library sizes. Samples with
 library sizes less than \code{lib_cut} will be excluded in the analysis. Default is 0, i.e. do not
