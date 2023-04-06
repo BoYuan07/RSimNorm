@@ -28,7 +28,7 @@ RSimNorm is a normalization method designed for low resolution level(ATUs/OTUs) 
 The package can be downloaded from github:
 
 ```{r}
-#devtools::install_github("BoYuan07/RSimNorm")
+devtools::install_github("BoYuan07/RSimNorm")
 ```
 
 Load the package

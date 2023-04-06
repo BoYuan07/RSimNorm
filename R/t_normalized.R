@@ -1,4 +1,4 @@
-#' @title t-test with data normalized by RSimNorm.
+#' @title Two sample t-test with data normalized by RSimNorm.
 #'
 #' @description This function conduct differential abundant test by t-test with data normalized by RSimNorm.
 #'
@@ -26,6 +26,9 @@
 #' \item{ \code{adjusted p-value}, a vector. adjusted p-value.}
 #' \item{ \code{is.DA}, a vector. T is differential abundant, F is not differential abundant.}
 #' }
+#'
+#' @export
+
 t.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, meta = NULL, main_var,
                         method = "BH", alpha = 0.05, eta = 0, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing

@@ -1,4 +1,4 @@
-#' @title correlation-test with data normalized by RSimNorm.
+#' @title Correlation-test with data normalized by RSimNorm.
 #'
 #' @description This function conduct differential abundant test by correlation-test with data normalized by RSimNorm.
 #'
@@ -26,6 +26,8 @@
 #' \item{ \code{adjusted p-value}, a vector. adjusted p-value.}
 #' \item{ \code{is.DA}, a vector. T is differential abundant, F is not differential abundant.}
 #' }
+#'
+#' @export
 corr.normalized = function(physeq = NULL, count_table = NULL, tax_level = NULL, meta = NULL, main_var, type = "pearson",
                         method = "BH", alpha = 0.05, eta = 0, lib_cut = 0, bootstrap_num = 3){
     # 1. data preprocessing

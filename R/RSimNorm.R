@@ -8,6 +8,8 @@
 #' @importFrom matrixStats colMedians
 #' @importFrom microbiome abundances
 #'
+#' @export
+#'
 #' @examples
 #'
 #'  data(gut_cn)
